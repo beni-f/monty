@@ -55,7 +55,6 @@ void push(stack_t **stack, unsigned int line_number)
 }
 void pint(stack_t **stack, unsigned int line_number)
 {
-    (void) line_number;
     if (*stack)
     {
         printf("%d\n", (*stack)->n);
@@ -64,4 +63,15 @@ void pint(stack_t **stack, unsigned int line_number)
         fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
         exit(EXIT_FAILURE);
     }
+}
+void pop(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp = *stack;
+    if (!*stack)
+    {
+        fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
+    }
+
+    *stack = (*stack)->next;
+    free(temp);
 }
