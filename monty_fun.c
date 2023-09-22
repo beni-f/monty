@@ -22,6 +22,7 @@ void read_file(char *filename)
         {"pall", pall},
         {"pint", pint},
         {"pop", pop},
+        {"swap", swap},
         {NULL, NULL}
     };
 
