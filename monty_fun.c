@@ -12,7 +12,7 @@ int is_integer(char *str)
 void read_file(char *filename)
 {
     FILE *file;
-    char *line = NULL;
+    char *line = NULL, *arg;
     size_t len;
     ssize_t read;
     stack_t *stack = NULL;
@@ -42,6 +42,16 @@ void read_file(char *filename)
 
         if (!opcode || opcode[0] == '#')
             continue;
+
+        arg = strchr(line, '\n');
+        if (arg)
+            *arg = '\0';
+
+        if (arg && *arg)
+        {
+            while (*arg == ' ')
+                arg++;
+        }
 
         for (i = 0; opcodes[i].opcode; i++)
         {
