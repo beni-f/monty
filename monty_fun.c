@@ -20,6 +20,7 @@ void read_file(char *filename)
     instruction_t opcodes[] = {
         {"push", push},
         {"pall", pall},
+        {"pint", pint},
         {NULL, NULL}
     };
 

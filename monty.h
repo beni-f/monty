@@ -40,5 +40,6 @@ void push_stack(stack_t **stack, int n);
 void pall(stack_t **stack, unsigned int line_number);
 void push(stack_t **stack, unsigned int line_number);
 void read_file(char *filename);
+void pint(stack_t **stack, unsigned int line_number);
 int is_integer(char *str);
 #endif
