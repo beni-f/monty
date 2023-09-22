@@ -32,7 +32,7 @@ void read_file(char *filename)
 
     while ((read = getline(&line, &len, file)) != -1)
     {
-        char *opcode = strtok(line, " \n");
+        char *opcode = strtok(line, " \n\t");
         unsigned int i;
 
         line_number++;
