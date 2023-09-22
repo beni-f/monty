@@ -47,12 +47,6 @@ void read_file(char *filename)
         if (arg)
             *arg = '\0';
 
-        if (arg && *arg)
-        {
-            while (*arg == ' ')
-                arg++;
-        }
-
         for (i = 0; opcodes[i].opcode; i++)
         {
             if (strcmp(opcode, opcodes[i].opcode) == 0)
