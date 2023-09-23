@@ -24,6 +24,7 @@ void read_file(char *filename)
         {"pop", pop},
         {"swap", swap},
         {"add", add},
+        {"nop", nop},
         {NULL, NULL}
     };
 
@@ -38,6 +39,7 @@ void read_file(char *filename)
     {
         char *opcode = strtok(line, " \n\t");
         unsigned int i;
+
         line_number++;
 
         if (!opcode || opcode[0] == '#')
@@ -65,4 +67,9 @@ void read_file(char *filename)
 
     free(line);
     fclose(file);
+}
+void nop(stack_t **stack, unsigned int line_number)
+{
+    (void)stack;
+    (void)line_number;
 }
