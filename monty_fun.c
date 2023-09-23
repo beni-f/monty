@@ -23,6 +23,7 @@ void read_file(char *filename)
         {"pint", pint},
         {"pop", pop},
         {"swap", swap},
+        {"add", add},
         {NULL, NULL}
     };
 
@@ -37,7 +38,6 @@ void read_file(char *filename)
     {
         char *opcode = strtok(line, " \n\t");
         unsigned int i;
-
         line_number++;
 
         if (!opcode || opcode[0] == '#')
