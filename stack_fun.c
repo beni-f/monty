@@ -7,6 +7,12 @@
  * @stack: pointer to the stack
  * @n: the number to be pushed in the stack
  */
+int is_integer(char *str)
+{
+    if (!str || !isdigit(*str))
+        return 0;
+    return 1;
+}
 void push_stack(stack_t **stack, int n)
 {
     stack_t *newnode;
@@ -96,4 +102,9 @@ void add(stack_t **stack, unsigned int line_number)
     }
     (*stack)->next->n += (*stack)->n;
     pop(stack, line_number);
+}
+void nop(stack_t **stack, unsigned int line_number)
+{
+    (void)stack;
+    (void)line_number;
 }

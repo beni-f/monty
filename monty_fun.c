@@ -1,75 +1,93 @@
 #define _GNU_SOURCE
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "monty.h"
-int is_integer(char *str)
+/**
+ * read_file - reads a bytecode file and runs commands
+ * @filename: pathname to file
+ * @stack: pointer to the top of the stack
+ *
+ */
+void read_file(char *filename, stack_t **stack)
 {
-    if (!str || !isdigit(*str))
-        return 0;
-    return 1;
+	char *buffer = NULL;
+	char *line;
+	size_t i = 0;
+	int line_count = 1;
+	instruct_func s;
+	int check;
+	int read;
+	FILE *file = fopen(filename, "r");
+
+	if (file == NULL)
+	{
+		printf("Error: Can't open file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	while ((read = getline(&buffer, &i, file)) != -1)
+	{
+		line = parse_line(buffer);
+		if (line == NULL || line[0] == '#')
+		{
+			line_count++;
+			continue;
+		}
+		s = get_op_func(line);
+		if (s == NULL)
+		{
+			printf("L%d: unknown instruction %s\n", line_count, line);
+			exit(EXIT_FAILURE);
+		}
+		s(stack, line_count);
+		line_count++;
+	}
+	free(buffer);
+	check = fclose(file);
+	if (check == -1)
+		exit(-1);
 }
-void read_file(char *filename)
+/**
+ * get_op_func -  checks opcode and returns the correct function
+ * @str: the opcode
+ *
+ * Return: returns a function, or NULL on failure
+ */
+instruct_func get_op_func(char *str)
 {
-    FILE *file;
-    char *line = NULL, *arg;
-    size_t len;
-    ssize_t read;
-    stack_t *stack = NULL;
-    unsigned int line_number = 0;
-    instruction_t opcodes[] = {
-        {"push", push},
-        {"pall", pall},
-        {"pint", pint},
-        {"pop", pop},
-        {"swap", swap},
-        {"add", add},
-        {"nop", nop},
-        {NULL, NULL}
-    };
+	int i;
 
-    file = fopen(filename, "r");
-    if (!file)
-    {
-        fprintf(stderr, "Error: Can't open file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
+	instruction_t instruct[] = {
+		{"push", push},
+		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"add", add},
+		{"nop", nop},
+		{NULL, NULL},
+	};
 
-    while ((read = getline(&line, &len, file)) != -1)
-    {
-        char *opcode = strtok(line, " \n\t");
-        unsigned int i;
+	i = 0;
+	while (instruct[i].f != NULL && strcmp(instruct[i].opcode, str) != 0)
+	{
+		i++;
+	}
 
-        line_number++;
-
-        if (!opcode || opcode[0] == '#')
-            continue;
-
-        arg = strchr(line, '\n');
-        if (arg)
-            *arg = '\0';
-
-        for (i = 0; opcodes[i].opcode; i++)
-        {
-            if (strcmp(opcode, opcodes[i].opcode) == 0)
-            {
-                opcodes[i].f(&stack, line_number);
-                break;
-            }
-        }
-
-        if (!opcodes[i].opcode)
-        {
-            fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    free(line);
-    fclose(file);
+	return (instruct[i].f);
 }
-void nop(stack_t **stack, unsigned int line_number)
+
+#include "monty.h"
+
+/**
+ * parse_line - parses a line for an opcode and arguments
+ * @line: the line to be parsed
+ *
+ * Return: returns the opcode or null on failure
+ */
+char *parse_line(char *line)
 {
-    (void)stack;
-    (void)line_number;
+	char *op_code;
+
+	op_code = strtok(line, "\n ");
+	if (op_code == NULL)
+		return (NULL);
+	return (op_code);
 }

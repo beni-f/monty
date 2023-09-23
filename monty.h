@@ -36,22 +36,19 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-typedef struct global_variable
-{
-	FILE *file;
-	int push_arg;
-	char *buffer;
-} global_var;
 
-extern global_var var_global;
+typedef void (*instruct_func)(stack_t **stack, unsigned int line_number);
+
 void push_stack(stack_t **stack, int n);
 void pall(stack_t **stack, unsigned int line_number);
 void push(stack_t **stack, unsigned int line_number);
-void read_file(char *filename);
+void read_file(char *filename, stack_t **stack);
 void pint(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
 void add(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
+char *parse_line(char *line);
+instruct_func get_op_func(char *str);
 int is_integer(char *str);
 #endif
